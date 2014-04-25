@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Seventeen Past One]]></title>
+  <link href="http://pfac.github.io/atom.xml" rel="self"/>
+  <link href="http://pfac.github.io/"/>
+  <updated>2014-04-25T14:01:00+01:00</updated>
+  <id>http://pfac.github.io/</id>
+  <author>
+    <name><![CDATA[pfac]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The prodigal son - Preface]]></title>
+    <link href="http://pfac.github.io/blog/2014/04/25/the-prodigal-son-preface/"/>
+    <updated>2014-04-25T13:23:00+01:00</updated>
+    <id>http://pfac.github.io/blog/2014/04/25/the-prodigal-son-preface</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<p>Several years ago (god I&#8217;m old), just after I&#8217;ve finished high school, I plunged into the world of PHP. My previous experience was in classes using ASP (the old one), and I did not want to keep myself locked in the Microsoft world. I already had a great respect for open-source back then.</p>
+
+<p>For more than a month, I lived, breathed and ate web. I improved my understanding of HTML, XML and XHTML. I practised CSS 2.1 to the point where I was having discussions in forums to understand why IE was so much different. I created my first website (nothing worth showing), with PHP controlling everything on the background. I even learned Javascript, not much, just enough so I would never come to &#8220;fear&#8221; it.</p>
+
+<p>Using PHP I implemented my own router, authentication mechanism, template language, and I didn&#8217;t even know I was doing so. I <em>spaghetti-ed</em> my way in a webapp, and faced the overwhelming feeling of losing the control over your own creation.</p>
+
+<p>After that summer, I left PHP. I only dealt with it once more, in my third year of college, for an assignment where we had to create a simple webapp to manage a database (basically just CRUD). By that time, I had already spent too much time away from web development (I was more into games), and whenever the subject surfaced in a conversation my antennas where already tuned to Ruby on Rails.</p>
+
+<p>In the last year and a half, I got started with Rails, I got to play with Angular, and I ended up getting a job working with Java EE right after I finished my master&#8217;s.</p>
+
+<p>Now the prodigal son returns. A friend has just approached me with a challenge, a simple webapp, but it will have to be done in PHP. My <em>spaghetti</em> days are long gone, but several questions now arise:</p>
+
+<ul>
+<li>Am I able to relearn a language that I&#8217;ve come to consider so inferior?</li>
+<li>Can I translate my (short) Rails knowledge to Laravel, Symfony or Yii?</li>
+<li>Do I even need a framework, or can I just adapt Drupal like so many have before?</li>
+</ul>
+
+
+<p>And like everything in life, the time to make a decision is very limited&#8230;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Joining Spree Along The Rails]]></title>
+    <link href="http://pfac.github.io/blog/2013/07/22/a-joining-spree-along-the-rails/"/>
+    <updated>2013-07-22T23:01:00+01:00</updated>
+    <id>http://pfac.github.io/blog/2013/07/22/a-joining-spree-along-the-rails</id>
+    <content type="html"><![CDATA[<p>How to use ActiveRecord to perform a chain of nested <code>INNER JOIN</code> operations.</p>
+
+<!-- more -->
+
+
+<h2>TL;DR</h2>
+
+<p>&#8220;<strong>I want to know all the distinct <em>option values</em> of the <em>option type</em> &#8220;gender&#8221;, but only for the <em>products</em> associated with a given <em>category</em></strong>&#8221;</p>
+
+<p>translates to</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Spree</span><span class="p">:</span><span class="ss">:OptionValue</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:variants</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:product</span> <span class="o">=&gt;</span> <span class="ss">:classifications</span> <span class="p">}</span>
+</span><span class='line'><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:option_type_id</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:spree_products_taxons</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:taxon_id</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="p">}</span>
+</span><span class='line'><span class="p">)</span><span class="o">.</span><span class="n">uniq</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>assuming that the given <em>category</em> has the taxon ID 2 and that the <em>gender</em> option type has ID 1.</p>
+
+<p>The Spree 1.3 models:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Spree</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">OptionValue</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>    <span class="n">belongs_to</span> <span class="ss">:option_type</span>
+</span><span class='line'>    <span class="n">has_and_belongs_to_many</span> <span class="ss">:variants</span><span class="p">,</span> <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="s1">&#39;spree_option_values_variants&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">OptionType</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:option_values</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Variant</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>    <span class="n">belongs_to</span> <span class="ss">:product</span>
+</span><span class='line'>    <span class="n">has_and_belongs_to_many</span> <span class="ss">:option_values</span><span class="p">,</span> <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="ss">:spree_option_values_variants</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:classifications</span><span class="p">,</span> <span class="ss">:dependent</span> <span class="o">=&gt;</span> <span class="ss">:delete_all</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:taxons</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:classifications</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:variants</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Classification</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">table_name</span> <span class="o">=</span> <span class="s1">&#39;spree_products_taxons&#39;</span>
+</span><span class='line'>    <span class="n">belongs_to</span> <span class="ss">:product</span>
+</span><span class='line'>    <span class="n">belongs_to</span> <span class="ss">:taxon</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The schema:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">create_table</span> <span class="s2">&quot;spree_option_values&quot;</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">integer</span>  <span class="s2">&quot;option_type_id&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">create_table</span> <span class="s2">&quot;spree_products_taxons&quot;</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="s2">&quot;product_id&quot;</span>
+</span><span class='line'>    <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="s2">&quot;taxon_id&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Explain</h2>
+
+<p>Lately, I&#8217;ve working on this project for an online store in Rails, and for that I&#8217;m using Spree. In this store, every product belongs to a category, and every product has the option type <em>gender</em> (man or woman). In every view&#8217;s header there is a main navigation bar with a button for each category. Each button also has a dropdown menu for the available genders, so the user can easily see all the products for man in category A, for example.</p>
+
+<p>The dropdown menus are not the same for all the categories. In other words, <code>CategoryA</code> has both <code>man</code> and <code>woman</code> in its dropdown menu, while <code>CategoryB</code> has only <code>woman</code>. As such, the dropdown is hard-coded for each button, which means that the navigation menu is completely hard-coded. This is ugly, hard to maintain and unnecessary, so I decided to change it to show the genders for which there are in fact products in each category.</p>
+
+<h3>Models and Schema</h3>
+
+<p>As you can see in the <strong>TL;DR</strong> section:</p>
+
+<ul>
+<li>An <code>OptionValue</code> has and belongs to many <code>Variants</code> (with the join table <code>spree_option_values_variants</code>)</li>
+<li>An <code>OptionValue</code> belongs to an <code>OptionType</code></li>
+<li>A <code>Variant</code> belongs to a <code>Product</code></li>
+<li>A <code>Product</code> has many <code>Classifications</code> (which use the table <code>spree_products_taxons</code>)</li>
+<li>A <code>Classification</code> also belongs to a <code>Taxon</code></li>
+<li>A <code>Taxon</code> belongs to a <code>Taxonomy</code></li>
+</ul>
+
+
+<p>This store only has one taxonomy named <em>Category</em>. All the categories are taxons that belong to this taxonomy.</p>
+
+<p>In order to make the menu dynamic I have to be able to obtain the gender values used among the products of a given category. In other words, <strong>I want to know all the distinct <em>option values</em> of the <em>option type</em> &#8220;gender&#8221;, but only for the <em>products</em> associated with a given <em>category</em></strong>.</p>
+
+<h3>SQL</h3>
+
+<p>If I was using SQL directly, my life would be easier. Let&#8217;s assume that my <em>gender</em> option type has de ID 1 and that my taxon (category) has the ID 4. I can easily translate what I want into a single query:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="o">*</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="n">spree_option_values</span><span class="p">,</span> <span class="n">spree_option_values_variants</span><span class="p">,</span> <span class="n">spree_variants</span><span class="p">,</span> <span class="n">spree_products_taxons</span>
+</span><span class='line'>  <span class="k">WHERE</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="n">option_type_id</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">AND</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">spree_option_values_variants</span><span class="p">.</span><span class="n">option_value_id</span>
+</span><span class='line'>    <span class="k">AND</span> <span class="n">spree_option_values_variants</span><span class="p">.</span><span class="n">variant_id</span> <span class="o">=</span> <span class="n">spree_variants</span><span class="p">.</span><span class="n">id</span>
+</span><span class='line'>    <span class="k">AND</span> <span class="n">spree_variants</span><span class="p">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">spree_products_taxons</span><span class="p">.</span><span class="n">product_id</span>
+</span><span class='line'>    <span class="k">AND</span> <span class="n">spree_products_taxons</span><span class="p">.</span><span class="n">taxon_id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yet, using ActiveRecord I access my records usually using some kind of <code>&lt;class&gt;.where(&lt;conditions&gt;)</code>. How do I get to that result?</p>
+
+<h3>Join</h3>
+
+<p>Formally, what happens in that previous SQL query, as intuitive as it might be, is a set of consecutive <code>INNER JOIN</code> operations. Using that operation explicitly, the same query can be rewritten as:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="o">*</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="n">spree_option_values</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">spree_option_values_variants</span>
+</span><span class='line'>          <span class="k">ON</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">spree_option_values_variants</span><span class="p">.</span><span class="n">option_value_id</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">spree_variants</span>
+</span><span class='line'>          <span class="k">ON</span> <span class="n">spree_variants</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">spree_option_values_variants</span><span class="p">.</span><span class="n">variant_id</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">spree_products_taxons</span>
+</span><span class='line'>          <span class="k">ON</span> <span class="n">spree_products_taxons</span><span class="p">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">spree_variants</span><span class="p">.</span><span class="n">product_id</span>
+</span><span class='line'>         <span class="k">AND</span> <span class="n">spree_products_taxons</span><span class="p">.</span><span class="n">taxon_id</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'>  <span class="k">WHERE</span> <span class="n">spree_option_values</span><span class="p">.</span><span class="n">option_type_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the way ActiveRecord allows to do this kind of searches, through the <code>join</code> method. Let&#8217;s skip to the answer:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Spree</span><span class="p">:</span><span class="ss">:OptionValue</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:variants</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:product</span> <span class="o">=&gt;</span> <span class="ss">:classifications</span> <span class="p">}</span>
+</span><span class='line'><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:option_type_id</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:spree_products_taxons</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:taxon_id</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="p">}</span>
+</span><span class='line'><span class="p">)</span><span class="o">.</span><span class="n">uniq</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>join</code> method uses the <strong>associations</strong> names to perform the joins, instead of using the table names. This is why instead of using <code>:spree_products_taxons</code> we use <code>:classifications</code>. In this specific case, the join creates a chain: we want to chain the variants of an option value, using the product of each of those variants to get to the taxons.</p>
+
+<p>Lastly, notice the <code>where</code> clause. When referring to the fields of the initial table (option values), using the field normally is enough. For the remaining tables, the table name and a hash of conditions is used.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress: a first impression]]></title>
+    <link href="http://pfac.github.io/blog/2013/04/25/octopress-a-first-impression/"/>
+    <updated>2013-04-25T01:17:00+01:00</updated>
+    <id>http://pfac.github.io/blog/2013/04/25/octopress-a-first-impression</id>
+    <content type="html"><![CDATA[<blockquote><p>I have no wife. No children. I won’t have a legacy. The only thing the world will know me for is <span class="underline">chunky bacon</span>.</p><footer><strong>why the lucky stiff</strong> <cite><a href='http://mislav.uniqpath.com/poignant-guide/'>Why&#8217;s (Poignant) Guide to Ruby</a></cite></footer></blockquote>
+
+
+<h3>Why today</h3>
+
+<p>Today I decided I would start my Octopress blog, &#8220;finally&#8221;. Like so many others, I have been postponing it since I can remember (a common thing among devs it seems). And, after years of failed attempts, from <a href="www.blogger.com">Blogger</a> to <a href="wordpress.com">Wordpress</a>, I finally went for <a href="http://octopress.org/">Octopress</a>.</p>
+
+<h3>Why Octopress</h3>
+
+<p>The text visible in the Octopress website, starting from the top: <em>Octopress, a blogging framework for hackers</em>. The only way this could appeal more to me is if it were presented by a hot naked busty woman instead of an yellow octopus.</p>
+
+<p>The thing that nagged me the most in Blogger and Wordpress was the need to login and spend time with writing, formatting the text and then publishing it. And I had to wait for pages to reload. And it seemed stupid.</p>
+
+<p>The same does not happen with Octopress. At the moment, I&#8217;m in Sublime Text, writing and formatting at the same time thanks to Markdown, spell checking on-the-fly thanks to Hunspell, and at any moment I can just close my laptop, go somewhere, and resume this just by opening the lid (I really did that, oh I&#8217;m so happy).</p>
+
+<p>All things taken into account, this really seems the best option for a guy like me. I wonder for how long&#8230;</p>
+
+<h3>Lastly a little story</h3>
+
+<p>It&#8217;s my last day in training: I&#8217;m training to be a trainer (ah, recursion in life) and I just spent the last hour fighting Octopress, instead of watching the last simulation of my class mates.</p>
+
+<p><em>Why?</em>, you ask.</p>
+
+<p>Just because. I decided I wanted to use <a href="http://slim-lang.com/">Slim</a> but ended up using the default Markdown.</p>
+
+<p><em>Why?</em> you ask, yet again.</p>
+
+<p>Because I don&#8217;t like closing tags in ERB, and since Slim does the same as Haml with less writing, it seemed perfect. But it wasn&#8217;t. It wasn&#8217;t because I wanted to quote why the lucky stiff. And for that I decided I would use Twitter Bootstrap.</p>
+
+<p><em>Why???</em>, you keep asking (god you&#8217;re annoying).</p>
+
+<p>Because it&#8217;s pretty, and I like pretty. And since it has support for pretty quotes, it&#8217;s just what I needed. So I spent an hour figuring out the <strong>right way</strong> to add it to the blog.</p>
+
+<p><em>Aaaand?</em>, you ask impatiently, an obvious signal that reading this post is turning out to be such an interesting experience.</p>
+
+<p>Wrapping up, when I was almost done, I opened the <code>plugins</code> directory. And there it was: a component just for pretty <code>blockquotes</code>. And here I was, <del>wasting</del> investing my time. Story of my life.</p>
+
+<p>If now you&#8217;re asking how is this relevant, it is not. I just wanted to let some steam off and use more Markdown.</p>
+]]></content>
+  </entry>
+  
+</feed>

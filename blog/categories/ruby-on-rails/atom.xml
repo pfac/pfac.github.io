@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby on Rails | Seventeen Past One]]></title>
+  <link href="http://pfac.github.io/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
+  <link href="http://pfac.github.io/"/>
+  <updated>2014-04-25T14:01:00+01:00</updated>
+  <id>http://pfac.github.io/</id>
+  <author>
+    <name><![CDATA[pfac]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Joining Spree Along The Rails]]></title>
+    <link href="http://pfac.github.io/blog/2013/07/22/a-joining-spree-along-the-rails/"/>
+    <updated>2013-07-22T23:01:00+01:00</updated>
+    <id>http://pfac.github.io/blog/2013/07/22/a-joining-spree-along-the-rails</id>
+    <content type="html"><![CDATA[<p>How to use ActiveRecord to perform a chain of nested <code>INNER JOIN</code> operations.</p>
+
+<!-- more -->
+
+
+<h2>TL;DR</h2>
+
+<p>"<strong>I want to know all the distinct <em>option values</em> of the <em>option type</em> "gender", but only for the <em>products</em> associated with a given <em>category</em></strong>"</p>
+
+<p>translates to</p>
+
+<p><code>ruby
+Spree::OptionValue.joins(
+  :variants =&gt; { :product =&gt; :classifications }
+).where(
+  :option_type_id =&gt; 1,
+  :spree_products_taxons =&gt; { :taxon_id =&gt; 2 }
+).uniq
+</code></p>
+
+<p>assuming that the given <em>category</em> has the taxon ID 2 and that the <em>gender</em> option type has ID 1.</p>
+
+<p>The Spree 1.3 models:</p>
+
+<p>``` ruby
+module Spree
+  class OptionValue &lt; ActiveRecord::Base</p>
+
+<pre><code>belongs_to :option_type
+has_and_belongs_to_many :variants, :join_table =&gt; 'spree_option_values_variants'
+</code></pre>
+
+<p>  end</p>
+
+<p>  class OptionType &lt; ActiveRecord::Base</p>
+
+<pre><code>has_many :option_values
+</code></pre>
+
+<p>  end</p>
+
+<p>  class Variant &lt; ActiveRecord::Base</p>
+
+<pre><code>belongs_to :product
+has_and_belongs_to_many :option_values, :join_table =&gt; :spree_option_values_variants
+</code></pre>
+
+<p>  end</p>
+
+<p>  class Product &lt; ActiveRecord::Base</p>
+
+<pre><code>has_many :classifications, :dependent =&gt; :delete_all
+has_many :taxons, :through =&gt; :classifications
+has_many :variants
+</code></pre>
+
+<p>  end</p>
+
+<p>  class Classification &lt; ActiveRecord::Base</p>
+
+<pre><code>self.table_name = 'spree_products_taxons'
+belongs_to :product
+belongs_to :taxon
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>The schema:</p>
+
+<p>``` ruby
+ActiveRecord::Schema.define do
+  create_table "spree_option_values" |t|</p>
+
+<pre><code>t.integer  "option_type_id"
+</code></pre>
+
+<p>  end</p>
+
+<p>  create_table "spree_products_taxons" |t|</p>
+
+<pre><code>t.integer "product_id"
+t.integer "taxon_id"
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Explain</h2>
+
+<p>Lately, I've working on this project for an online store in Rails, and for that I'm using Spree. In this store, every product belongs to a category, and every product has the option type <em>gender</em> (man or woman). In every view's header there is a main navigation bar with a button for each category. Each button also has a dropdown menu for the available genders, so the user can easily see all the products for man in category A, for example.</p>
+
+<p>The dropdown menus are not the same for all the categories. In other words, <code>CategoryA</code> has both <code>man</code> and <code>woman</code> in its dropdown menu, while <code>CategoryB</code> has only <code>woman</code>. As such, the dropdown is hard-coded for each button, which means that the navigation menu is completely hard-coded. This is ugly, hard to maintain and unnecessary, so I decided to change it to show the genders for which there are in fact products in each category.</p>
+
+<h3>Models and Schema</h3>
+
+<p>As you can see in the <strong>TL;DR</strong> section:</p>
+
+<ul>
+<li>An <code>OptionValue</code> has and belongs to many <code>Variants</code> (with the join table <code>spree_option_values_variants</code>)</li>
+<li>An <code>OptionValue</code> belongs to an <code>OptionType</code></li>
+<li>A <code>Variant</code> belongs to a <code>Product</code></li>
+<li>A <code>Product</code> has many <code>Classifications</code> (which use the table <code>spree_products_taxons</code>)</li>
+<li>A <code>Classification</code> also belongs to a <code>Taxon</code></li>
+<li>A <code>Taxon</code> belongs to a <code>Taxonomy</code></li>
+</ul>
+
+
+<p>This store only has one taxonomy named <em>Category</em>. All the categories are taxons that belong to this taxonomy.</p>
+
+<p>In order to make the menu dynamic I have to be able to obtain the gender values used among the products of a given category. In other words, <strong>I want to know all the distinct <em>option values</em> of the <em>option type</em> "gender", but only for the <em>products</em> associated with a given <em>category</em></strong>.</p>
+
+<h3>SQL</h3>
+
+<p>If I was using SQL directly, my life would be easier. Let's assume that my <em>gender</em> option type has de ID 1 and that my taxon (category) has the ID 4. I can easily translate what I want into a single query:</p>
+
+<p>``` sql
+SELECT DISTINCT spree_option_values.*
+  FROM spree_option_values, spree_option_values_variants, spree_variants, spree_products_taxons
+  WHERE spree_option_values.option_type_id = 1</p>
+
+<pre><code>AND spree_option_values.id = spree_option_values_variants.option_value_id
+AND spree_option_values_variants.variant_id = spree_variants.id
+AND spree_variants.product_id = spree_products_taxons.product_id
+AND spree_products_taxons.taxon_id = 4;
+</code></pre>
+
+<p>```</p>
+
+<p>Yet, using ActiveRecord I access my records usually using some kind of <code>&lt;class&gt;.where(&lt;conditions&gt;)</code>. How do I get to that result?</p>
+
+<h3>Join</h3>
+
+<p>Formally, what happens in that previous SQL query, as intuitive as it might be, is a set of consecutive <code>INNER JOIN</code> operations. Using that operation explicitly, the same query can be rewritten as:</p>
+
+<p>``` sql
+SELECT DISTINCT spree_option_values.*
+  FROM spree_option_values
+  INNER JOIN spree_option_values_variants</p>
+
+<pre><code>      ON spree_option_values.id = spree_option_values_variants.option_value_id
+</code></pre>
+
+<p>  INNER JOIN spree_variants</p>
+
+<pre><code>      ON spree_variants.id = spree_option_values_variants.variant_id
+</code></pre>
+
+<p>  INNER JOIN spree_products_taxons</p>
+
+<pre><code>      ON spree_products_taxons.product_id = spree_variants.product_id
+     AND spree_products_taxons.taxon_id = 4
+</code></pre>
+
+<p>  WHERE spree_option_values.option_type_id = 1;
+```</p>
+
+<p>This is the way ActiveRecord allows to do this kind of searches, through the <code>join</code> method. Let's skip to the answer:</p>
+
+<p><code>ruby
+Spree::OptionValue.joins(
+  :variants =&gt; { :product =&gt; :classifications }
+).where(
+  :option_type_id =&gt; 1,
+  :spree_products_taxons =&gt; { :taxon_id =&gt; 2 }
+).uniq
+</code></p>
+
+<p>The <code>join</code> method uses the <strong>associations</strong> names to perform the joins, instead of using the table names. This is why instead of using <code>:spree_products_taxons</code> we use <code>:classifications</code>. In this specific case, the join creates a chain: we want to chain the variants of an option value, using the product of each of those variants to get to the taxons.</p>
+
+<p>Lastly, notice the <code>where</code> clause. When referring to the fields of the initial table (option values), using the field normally is enough. For the remaining tables, the table name and a hash of conditions is used.</p>
+]]></content>
+  </entry>
+  
+</feed>

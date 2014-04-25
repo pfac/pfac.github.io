@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://pfac.github.io/blog/2013/04/25/octopress-a-first-impression/</loc>
+        <lastmod>2014-04-25T01:13:45+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://pfac.github.io/blog/2013/07/22/a-joining-spree-along-the-rails/</loc>
+        <lastmod>2014-04-25T01:13:45+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://pfac.github.io/blog/2014/04/25/the-prodigal-son-preface/</loc>
+        <lastmod>2014-04-25T13:48:20+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://pfac.github.io/blog/archives/</loc>
+        <lastmod>2014-04-25T13:48:20+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://pfac.github.io/</loc>
+        <lastmod>2014-04-25T13:48:20+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://pfac.github.io/robots.txt</loc>
+        <lastmod>2014-04-25T01:13:45+01:00</lastmod>
+    </url>
+</urlset>
