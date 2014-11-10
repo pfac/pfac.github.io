@@ -113,5 +113,5 @@ DEPENDENCIES
   rubypants (~> 0.2.0)
   sass-globbing (~> 1.0.0)
   sinatra (~> 1.4.2)
-  slim
+  slim (~> 2.1.0)
   stringex (~> 1.4.0)
