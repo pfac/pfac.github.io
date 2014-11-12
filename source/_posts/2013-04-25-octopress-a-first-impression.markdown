@@ -6,6 +6,11 @@ comments: true
 categories: 
 - Octopress
 ---
+
+A first post with Octopress. Just so I can see stuff.
+
+<!--more-->
+
 {% blockquote why the lucky stiff http://mislav.uniqpath.com/poignant-guide/ why's (poignant) Guide to Ruby %}
 I have no wife. No children. I won’t have a legacy. The only thing the world will know me for is <span class="underline">chunky bacon</span>.
 {% endblockquote %}
@@ -45,3 +50,6 @@ Because it's pretty, and I like pretty. And since it has support for pretty quot
 Wrapping up, when I was almost done, I opened the `plugins` directory. And there it was: a component just for pretty `blockquotes`. And here I was, ~~wasting~~ investing my time. Story of my life.
 
 If now you're asking how is this relevant, it is not. I just wanted to let some steam off and use more Markdown.
+
+###### EDIT
+Added an excerpt separator, this was getting ridiculous in the front page. (I know, Octopress defaults make no sense but I lack the time and/or will to change it).
