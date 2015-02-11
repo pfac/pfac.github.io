@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Seventeen Past One</title>
+  <title>Tip&trick: Eclipse not building Maven project automatically - Seventeen Past One</title>
   <meta name="author" content="pfac">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Problem: Eclipse not building a Maven project automatically before deploying it Yesterday I spent over an hour trying to figure out why my webapp was &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.iampfac.com">
+  <link rel="canonical" href="http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Seventeen Past One" type="application/atom+xml">
@@ -63,54 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/02/10/about-security/">About Security</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-10T20:55:51+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/02/10/about-security/">&#8211;verbose</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/11/12/eclipse-not-building-maven-project-automatically/">Tip&trick: Eclipse Not Building Maven Project Automatically</a></h1>
+      <h1 class="entry-title">Tip&trick: Eclipse Not Building Maven Project Automatically</h1>
     
     
       <p class="meta">
@@ -133,70 +91,33 @@
   </header>
 
 
-  <div class="entry-content"><p><em>Problem</em>: Eclipse not building a Maven project automatically before deploying it</p>
+<div class="entry-content"><p><em>Problem</em>: Eclipse not building a Maven project automatically before deploying it</p>
 
+<!-- more -->
+
+
+<p>Yesterday I spent over an hour trying to figure out why my webapp was not picking up my Spring annotations properly. After that dreadful 1h+, I found out that Eclipse was not building my webapp automatically before deploying it to the application server. This was the point at which I had to get up, leave the office and go to the gym, otherwise my laptop would now be reduced to its most elementary components.</p>
+
+<p>Today I found out why. I created this project manually instead of using <code>mvn archetype:generate</code> because I didn&rsquo;t want to use an archetype (I like to have control over the stuff that&rsquo;s placed in my projects and I have no appreciation for the placeholders the generator creates).</p>
+
+<p>When I created the <code>pom.xml</code> manually, I gave the project the type <code>pom</code>, because I meant to create several submodules inside it. I configured the project to be a Maven project at this time (right-click on the project > <em>Configure</em>  > <em>Convert to Maven Project</em>).</p>
+
+<p>Later I decided I wouldn&rsquo;t be adding submodules for now, instead having this single project generate a WAR file. I changed the POM file to have the type <code>war</code>. Eclipse immediately detected the <code>web.xml</code> file and allowed me to deploy the project to a server. Yet, apparently, it did not know the project has to be built before, or it didn&rsquo;t know how.</p>
+
+<p>To fix it, <strong>make sure you update the Maven project in Eclipse</strong> (right-click on the project > <em>Maven</em> > <em>Update project</em>).</p>
+
+<p>I still think it should have picked it up automatically&hellip;</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/11/12/eclipse-not-building-maven-project-automatically/">&#8211;verbose</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/11/12/all-mighty-maven/">All Mighty Maven</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">pfac</span></span>
 
-<time datetime="2014-11-12T01:14:00+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The long overdue introduction to Maven that I promised myself I would write.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/11/12/all-mighty-maven/">&#8211;verbose</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/22/a-joining-spree-along-the-rails/">A Joining Spree Along the Rails</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -208,73 +129,40 @@
   
 
 
-<time datetime="2013-07-22T23:01:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>How to use ActiveRecord to perform a chain of nested <code>INNER JOIN</code> operations.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/22/a-joining-spree-along-the-rails/">&#8211;verbose</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2014-11-12T12:06:26+00:00" pubdate data-updated="true"></time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/25/octopress-a-first-impression/">Octopress: A First Impression</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/eclipse/'>eclipse</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/maven/'>maven</a>, <a class='category' href='/blog/categories/tips-and-tricks/'>tips&tricks</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
 
 
-<time datetime="2013-04-25T01:17:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically/" data-via="iampfac" data-counturl="http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically/" >Tweet</a>
+  
+  
+  
+</div>
 
-
-  <div class="entry-content"><p>A first post with Octopress. Just so I can see stuff.</p>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/12/all-mighty-maven/" title="Previous Post: All Mighty Maven">&laquo; All Mighty Maven</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/02/10/about-security/" title="Next Post: About Security">About Security &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/25/octopress-a-first-impression/">&#8211;verbose</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -339,6 +227,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Seventeen Past One</title>
+  <title>About Security - Seventeen Past One</title>
   <meta name="author" content="pfac">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Here&rsquo;s my daily dilemma. I have an application, it uses Spring Security, and I needed to find a way to disable security altogether with a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.iampfac.com">
+  <link rel="canonical" href="http://blog.iampfac.com/blog/2015/02/10/about-security">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Seventeen Past One" type="application/atom+xml">
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/02/10/about-security/">About Security</a></h1>
+      <h1 class="entry-title">About Security</h1>
     
     
       <p class="meta">
@@ -94,68 +91,39 @@
   </header>
 
 
-  <div class="entry-content"></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/02/10/about-security/">&#8211;verbose</a>
-    </footer>
-  
+<div class="entry-content"><!-- more -->
 
 
-    </article>
-  
-  
-    <article>
+<p><img class="right" src="/images/security-fail.jpg" width="450" title="&#34;'Much numbers, wow security'&#34;" alt="&#34;'Much numbers, wow security'&#34;"></p>
+
+<p>Here&rsquo;s my daily dilemma. I have an application, it uses Spring Security, and I needed to find a way to disable security altogether with a property in a configuration file. This made me wonder whether I really should do things as I am.</p>
+
+<p>Currently, security rules are placed in the application core. This means that once security is enabled, the business logic incorporates the security rules. This also allows for services, which <em>perform</em> the application use cases, to be fully secured by default.</p>
+
+<p>I do not question whether these rules should be in the core. The only other option would be in an higher layer (a delivery mechanism), but this would require me to duplicate this logic in every such mechanism, which we all now would end up in every god damned developer that wanders the repository to have its own view of how security should be implemented in the delivery mechanism he happens to be working <em>today</em>.</p>
+
+<p>Even so, I do question where and how this logic should be activated. While I wouldn&rsquo;t have anything against it being activated at all times (1) I cannot stop anyone from reimplementing the configuration class that activates it and replace it with one that does not and (2) there are <em>some</em> cases where the convenience of having the security configuration disabled surpasses the risks, even if only temporarily.</p>
+
+<p><small>Truth be told, I don&rsquo;t quite get it either but it is one of the requirements&hellip;</small></p>
+
+<p>Here&rsquo;s what I came up with.</p>
+
+<p>Regarding the how, I have to find a way to hijack the application context configuration and disable security before it is set up. That much I have solved already by placing an application context initializer that handles this. The problem now is that it must be controlled by a property in a configuration file, which have not been loaded by now. I seem to have found a way to perform this by hand but I do question whether this shouldn&rsquo;t be done by the actual application initializer in the final delivery mechanism, instead of the core itself.</p>
+
+<p>Despite having the application context initializer in the core, the fact remains that it has to be called explicitly, either in a <code>web.xml</code> or another initializer. So should I really have all this in the core, or should I just follow an approach of preparation in the core, and let the outer layers handle this part of the configuration?</p>
+
+<p><img class="center" src="/images/security-fail.gif" title="&#34;Nobody is safe...&#34;" alt="&#34;Nobody is safe...&#34;"></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/11/12/eclipse-not-building-maven-project-automatically/">Tip&trick: Eclipse Not Building Maven Project Automatically</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">pfac</span></span>
 
-<time datetime="2014-11-12T12:06:26+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>Problem</em>: Eclipse not building a Maven project automatically before deploying it</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/11/12/eclipse-not-building-maven-project-automatically/">&#8211;verbose</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/11/12/all-mighty-maven/">All Mighty Maven</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -167,114 +135,32 @@
   
 
 
-<time datetime="2014-11-12T01:14:00+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The long overdue introduction to Maven that I promised myself I would write.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/11/12/all-mighty-maven/">&#8211;verbose</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2015-02-10T20:55:51+00:00" pubdate data-updated="true"></time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2013/07/22/a-joining-spree-along-the-rails/">A Joining Spree Along the Rails</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2013-07-22T23:01:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>How to use ActiveRecord to perform a chain of nested <code>INNER JOIN</code> operations.</p>
-
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.iampfac.com/blog/2015/02/10/about-security/" data-via="iampfac" data-counturl="http://blog.iampfac.com/blog/2015/02/10/about-security/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/22/a-joining-spree-along-the-rails/">&#8211;verbose</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/25/octopress-a-first-impression/">Octopress: A First Impression</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-25T01:17:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A first post with Octopress. Just so I can see stuff.</p>
+        <a class="basic-alignment left" href="/blog/2014/11/12/eclipse-not-building-maven-project-automatically/" title="Previous Post: Tip&trick: Eclipse not building Maven project automatically">&laquo; Tip&trick: Eclipse not building Maven project automatically</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/25/octopress-a-first-impression/">&#8211;verbose</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -339,6 +225,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

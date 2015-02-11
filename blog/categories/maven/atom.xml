@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: maven | Seventeen Past One]]></title>
+  <link href="http://blog.iampfac.com/blog/categories/maven/atom.xml" rel="self"/>
+  <link href="http://blog.iampfac.com/"/>
+  <updated>2015-02-11T00:28:21+00:00</updated>
+  <id>http://blog.iampfac.com/</id>
+  <author>
+    <name><![CDATA[pfac]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tip&trick: Eclipse not building Maven project automatically]]></title>
+    <link href="http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically/"/>
+    <updated>2014-11-12T12:06:26+00:00</updated>
+    <id>http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically</id>
+    <content type="html"><![CDATA[<p><em>Problem</em>: Eclipse not building a Maven project automatically before deploying it</p>
+
+<!-- more -->
+
+
+<p>Yesterday I spent over an hour trying to figure out why my webapp was not picking up my Spring annotations properly. After that dreadful 1h+, I found out that Eclipse was not building my webapp automatically before deploying it to the application server. This was the point at which I had to get up, leave the office and go to the gym, otherwise my laptop would now be reduced to its most elementary components.</p>
+
+<p>Today I found out why. I created this project manually instead of using <code>mvn archetype:generate</code> because I didn&rsquo;t want to use an archetype (I like to have control over the stuff that&rsquo;s placed in my projects and I have no appreciation for the placeholders the generator creates).</p>
+
+<p>When I created the <code>pom.xml</code> manually, I gave the project the type <code>pom</code>, because I meant to create several submodules inside it. I configured the project to be a Maven project at this time (right-click on the project > <em>Configure</em>  > <em>Convert to Maven Project</em>).</p>
+
+<p>Later I decided I wouldn&rsquo;t be adding submodules for now, instead having this single project generate a WAR file. I changed the POM file to have the type <code>war</code>. Eclipse immediately detected the <code>web.xml</code> file and allowed me to deploy the project to a server. Yet, apparently, it did not know the project has to be built before, or it didn&rsquo;t know how.</p>
+
+<p>To fix it, <strong>make sure you update the Maven project in Eclipse</strong> (right-click on the project > <em>Maven</em> > <em>Update project</em>).</p>
+
+<p>I still think it should have picked it up automatically&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[All Mighty Maven]]></title>
+    <link href="http://blog.iampfac.com/blog/2014/11/12/all-mighty-maven/"/>
+    <updated>2014-11-12T01:14:00+00:00</updated>
+    <id>http://blog.iampfac.com/blog/2014/11/12/all-mighty-maven</id>
+    <content type="html"><![CDATA[<p>The long overdue introduction to Maven that I promised myself I would write.</p>
+
+<!-- more -->
+
+
+<h2>What is Maven</h2>
+
+<p>Quick answer: <strong>EVERYTHING</strong></p>
+
+<p><img class="center" src="/images/everything.gif" title="&ldquo;Maven does EVERYTHING&rdquo;" ></p>
+
+<p>Ok, not really <em>everything</em>. But it sure seems like it. At least to the new guy.</p>
+
+<p>Maven may have (<em>at least</em>) the following jobs within an application:</p>
+
+<ul>
+<li><strong>Manifest</strong>, holding information about the project and its structure;</li>
+<li><strong>Dependency manager</strong>, having the list of dependencies and automatically load them from the registered repositories;</li>
+<li><strong>Task runner</strong>, like <code>make</code> or <code>jake</code> but more confusing</li>
+<li><strong>Builder</strong>, compiling all the code and packaging it nicely (this part is convenient, to say the least).</li>
+</ul>
+
+
+<p>Personally, I felt like these were too many things to a single tool. But apparently the Java world had been happy with it for a long time, so why would I fight it?</p>
+
+<p>An year later, I&rsquo;ve seen a lot of things that make me appreciate Maven. Using a single <code>pom.xml</code> file (yes, I also thought XML was dead), I can set almost everything that describes my project. It even assumes a given <a href="http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html">standard directory structure</a>, which I strongly believe is preventing every ego in an enterprise from coming up with its own.</p>
+
+<h2>Le <code>pom.xml</code></h2>
+
+<p>A <code>pom.xml</code> file is rather intuitive. Start with a simple XML skeleton using the <code>project</code> tag:</p>
+
+<pre><code class="xml">&lt;project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://maven.apache.org/POM/4.0.0
+        http://maven.apache.org/xsd/maven-4.0.0.xsd
+    "
+&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;!-- ... --&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>Note the <code>modelVersion</code> tag in this example. It states the version of the object model this POM is using. General rule, it doesn&rsquo;t change so I keep it in the skeleton.</p>
+
+<p>Next we add some basic information regarding this project:</p>
+
+<pre><code class="xml">    &lt;!-- Basics --&gt;
+    &lt;groupId&gt;com.iampfac&lt;/groupId&gt;
+    &lt;artifactId&gt;example&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;packaging&gt;war&lt;/packaging&gt;
+    &lt;name&gt;Example&lt;/name&gt;
+    &lt;description&gt;An Example. Duh!&lt;/description&gt;
+</code></pre>
+
+<p>I believe this part is trivial enough. Next we have the properties. These can be used later in the file using the <code>${...}</code> notation.</p>
+
+<pre><code class="xml">    &lt;!-- Properties --&gt;
+    &lt;properties&gt;
+        &lt;!-- ... --&gt;
+        &lt;very.useful.property&gt;very useful value&lt;/very.useful.property&gt;
+        &lt;!-- ... --&gt;
+    &lt;/properties&gt;
+</code></pre>
+
+<p>For instance, one use the <code>${very.useful.property}</code> as the value for other tags in the document, and it would be the same as writing the value directly (but more DRY). The basic information tags also have their equivalent properties, but their value may not be the value of a property. So using the <code>${...}</code> to set the value of one of those tags would not work. As an example, the <code>artifactId</code> tag sets the value for <code>${project.artifactId}</code>.</p>
+
+<p>Next, the dependencies:</p>
+
+<pre><code class="xml">    &lt;!-- Dependencies --&gt;
+    &lt;dependencies&gt;
+        &lt;!-- ... --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.example&lt;/groupId&gt;
+            &lt;artifactId&gt;java-lib&lt;/artifactId&gt;
+            &lt;version&gt;1.2.3&lt;/version&gt;
+            &lt;type&gt;war&lt;/type&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+            &lt;exclusions&gt;
+                &lt;!-- ... --&gt;
+                &lt;exclusion&gt;
+                    &lt;groupId&gt;org.example.another&lt;/groupId&gt;
+                    &lt;artifactId&gt;unwanted-lib&lt;/artifactId&gt;
+                &lt;/exclusion&gt;
+                &lt;!-- ... --&gt;
+            &lt;/exclusions&gt;
+        &lt;/dependency&gt;
+        &lt;!-- ... --&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+
+<p>Note that what identifies a dependency is the same information that we set above in the basics section of our POM file. Maven repositories use this information to index the packages. <code>type</code> and <code>scope</code> tags are optional and define the type of dependency and the scope where it is required; by default they hold the values <code>jar</code> and <code>compile</code>, respectively.</p>
+
+<p><code>exclusions</code> is also an optional tag but a little more special, as it allows to exclude any unwanted dependency of our dependency. For instance, the <code>spring-core</code> package includes the <code>commons-logging</code> package, but one may prefer to use SLF4J, in which case the <code>commons-logging</code> package would have to be included in the <code>exclusions</code> tag.</p>
+
+<p>Lastly, the build related stuff:</p>
+
+<pre><code class="xml">    &lt;build&gt;
+        &lt;finalName&gt;${project.artifactId}&lt;/finalName&gt;
+        &lt;plugins&gt;
+            &lt;!-- ... --&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.example&lt;/groupId&gt;
+                &lt;artifactId&gt;maven.plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.0&lt;/version&gt;
+                &lt;!-- ... --&gt;
+            &lt;/plugin&gt;
+            &lt;!-- ... --&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+</code></pre>
+
+<p>Here we can set the name of the package to be generated when building this project (for example, when the project is an webapp we can set the name of the resulting <code>.war</code> file), and add plugins which perform additional tasks like running tests, customizing the build process, etc&hellip;</p>
+
+<h2>Conclusion</h2>
+
+<p>Honestly I don&rsquo;t know at this moment what else I can write about Maven, and since this post is already long I&rsquo;ll wrap it here. Maybe I&rsquo;ll add a section later with an example of how to structure the project with multiple POM files. If I feel like it.</p>
+
+<p><img class="center" src="/images/deal-with-it.gif" title="&ldquo;My blog, my rulez!&rdquo;" ></p>
+]]></content>
+  </entry>
+  
+</feed>

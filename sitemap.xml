@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://blog.iampfac.com/blog/2015/02/10/about-security/</loc>
+    <lastmod>2015-02-10T20:55:51+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically/</loc>
+    <lastmod>2014-11-12T12:06:26+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/blog/2014/11/12/all-mighty-maven/</loc>
+    <lastmod>2014-11-12T01:14:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/blog/2013/07/22/a-joining-spree-along-the-rails/</loc>
+    <lastmod>2013-07-22T23:01:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/blog/2013/04/25/octopress-a-first-impression/</loc>
+    <lastmod>2013-04-25T01:17:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/blog/archives/</loc>
+    <lastmod>2015-02-11T00:28:21+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://blog.iampfac.com/</loc>
+    <lastmod>2015-02-11T00:28:21+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

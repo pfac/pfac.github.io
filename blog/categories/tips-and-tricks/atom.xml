@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tips&tricks | Seventeen Past One]]></title>
+  <link href="http://blog.iampfac.com/blog/categories/tips-and-tricks/atom.xml" rel="self"/>
+  <link href="http://blog.iampfac.com/"/>
+  <updated>2015-02-11T00:28:21+00:00</updated>
+  <id>http://blog.iampfac.com/</id>
+  <author>
+    <name><![CDATA[pfac]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tip&trick: Eclipse not building Maven project automatically]]></title>
+    <link href="http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically/"/>
+    <updated>2014-11-12T12:06:26+00:00</updated>
+    <id>http://blog.iampfac.com/blog/2014/11/12/eclipse-not-building-maven-project-automatically</id>
+    <content type="html"><![CDATA[<p><em>Problem</em>: Eclipse not building a Maven project automatically before deploying it</p>
+
+<!-- more -->
+
+
+<p>Yesterday I spent over an hour trying to figure out why my webapp was not picking up my Spring annotations properly. After that dreadful 1h+, I found out that Eclipse was not building my webapp automatically before deploying it to the application server. This was the point at which I had to get up, leave the office and go to the gym, otherwise my laptop would now be reduced to its most elementary components.</p>
+
+<p>Today I found out why. I created this project manually instead of using <code>mvn archetype:generate</code> because I didn&rsquo;t want to use an archetype (I like to have control over the stuff that&rsquo;s placed in my projects and I have no appreciation for the placeholders the generator creates).</p>
+
+<p>When I created the <code>pom.xml</code> manually, I gave the project the type <code>pom</code>, because I meant to create several submodules inside it. I configured the project to be a Maven project at this time (right-click on the project > <em>Configure</em>  > <em>Convert to Maven Project</em>).</p>
+
+<p>Later I decided I wouldn&rsquo;t be adding submodules for now, instead having this single project generate a WAR file. I changed the POM file to have the type <code>war</code>. Eclipse immediately detected the <code>web.xml</code> file and allowed me to deploy the project to a server. Yet, apparently, it did not know the project has to be built before, or it didn&rsquo;t know how.</p>
+
+<p>To fix it, <strong>make sure you update the Maven project in Eclipse</strong> (right-click on the project > <em>Maven</em> > <em>Update project</em>).</p>
+
+<p>I still think it should have picked it up automatically&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

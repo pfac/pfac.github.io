@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: octopress | Seventeen Past One]]></title>
+  <link href="http://blog.iampfac.com/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://blog.iampfac.com/"/>
+  <updated>2015-02-11T00:28:21+00:00</updated>
+  <id>http://blog.iampfac.com/</id>
+  <author>
+    <name><![CDATA[pfac]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress: a first impression]]></title>
+    <link href="http://blog.iampfac.com/blog/2013/04/25/octopress-a-first-impression/"/>
+    <updated>2013-04-25T01:17:00+01:00</updated>
+    <id>http://blog.iampfac.com/blog/2013/04/25/octopress-a-first-impression</id>
+    <content type="html"><![CDATA[<p>A first post with Octopress. Just so I can see stuff.</p>
+
+<!--more-->
+
+
+<p><blockquote><p>I have no wife. No children. I won’t have a legacy. The only thing the world will know me for is <span class="underline">chunky bacon</span>.</p><footer><strong>why the lucky stiff <a href="http://mislav.uniqpath.com/poignant-guide/">http://mislav.uniqpath.com/poignant-guide/</a> why&rsquo;s (poignant) Guide to Ruby</strong></footer></blockquote></p>
+
+<h3>Why today</h3>
+
+<p>Today I decided I would start my Octopress blog, &ldquo;finally&rdquo;. Like so many others, I have been postponing it since I can remember (a common thing among devs it seems). And, after years of failed attempts, from <a href="www.blogger.com">Blogger</a> to <a href="wordpress.com">Wordpress</a>, I finally went for <a href="http://octopress.org/">Octopress</a>.</p>
+
+<h3>Why Octopress</h3>
+
+<p>The text visible in the Octopress website, starting from the top: <em>Octopress, a blogging framework for hackers</em>. The only way this could appeal more to me is if it were presented by a hot naked busty woman instead of an yellow octopus.</p>
+
+<p>The thing that nagged me the most in Blogger and Wordpress was the need to login and spend time with writing, formatting the text and then publishing it. And I had to wait for pages to reload. And it seemed stupid.</p>
+
+<p>The same does not happen with Octopress. At the moment, I&rsquo;m in Sublime Text, writing and formatting at the same time thanks to Markdown, spell checking on-the-fly thanks to Hunspell, and at any moment I can just close my laptop, go somewhere, and resume this just by opening the lid (I really did that, oh I&rsquo;m so happy).</p>
+
+<p>All things taken into account, this really seems the best option for a guy like me. I wonder for how long&hellip;</p>
+
+<h3>Lastly a little story</h3>
+
+<p>It&rsquo;s my last day in training: I&rsquo;m training to be a trainer (ah, recursion in life) and I just spent the last hour fighting Octopress, instead of watching the last simulation of my class mates.</p>
+
+<p><em>Why?</em>, you ask.</p>
+
+<p>Just because. I decided I wanted to use <a href="http://slim-lang.com/">Slim</a> but ended up using the default Markdown.</p>
+
+<p><em>Why?</em> you ask, yet again.</p>
+
+<p>Because I don&rsquo;t like closing tags in ERB, and since Slim does the same as Haml with less writing, it seemed perfect. But it wasn&rsquo;t. It wasn&rsquo;t because I wanted to quote why the lucky stiff. And for that I decided I would use Twitter Bootstrap.</p>
+
+<p><em>Why???</em>, you keep asking (god you&rsquo;re annoying).</p>
+
+<p>Because it&rsquo;s pretty, and I like pretty. And since it has support for pretty quotes, it&rsquo;s just what I needed. So I spent an hour figuring out the <strong>right way</strong> to add it to the blog.</p>
+
+<p><em>Aaaand?</em>, you ask impatiently, an obvious signal that reading this post is turning out to be such an interesting experience.</p>
+
+<p>Wrapping up, when I was almost done, I opened the <code>plugins</code> directory. And there it was: a component just for pretty <code>blockquotes</code>. And here I was, <del>wasting</del> investing my time. Story of my life.</p>
+
+<p>If now you&rsquo;re asking how is this relevant, it is not. I just wanted to let some steam off and use more Markdown.</p>
+
+<h6>EDIT</h6>
+
+<p>Added an excerpt separator, this was getting ridiculous in the front page. (I know, Octopress defaults make no sense but I lack the time and/or will to change it).</p>
+]]></content>
+  </entry>
+  
+</feed>
